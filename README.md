@@ -57,8 +57,8 @@ Run Test case
 | POST /task/             |   Used to can create a task           |
 | GET /task/              |   Used to can retrieve tasks          |
 | GET /task/:id           |   Used to can retrieve a single task  |
-| PATCH /posts/:id        |   Used to can edit a single task      |
-| DELETE /posts/:id       |   Used to  delete a specific task     |
+| PATCH /task/:id        |   Used to can edit a single task      |
+| DELETE /task/:id       |   Used to  delete a specific task     |
 
 ## License
 - MIT

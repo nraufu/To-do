@@ -20,6 +20,24 @@ app.use(cors());
 app.use(routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.use(
+    cors({
+        origin: "*",
+        methods: "GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS",
+        preflightContinue: false,
+        optionsSuccessStatus: 204
+    })
+);
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept',
+    );
+    next();
+});
+
 app.use((req, res, next) => {
   res.status(400).json({ Error: "Invalid Request" });
   next();
