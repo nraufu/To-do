@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node app.js",
+    "start": "babel-node server/app.js",
     "dev": "cross-env NODE_ENV=development nodemon --exec babel-node server/app.js",
     "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha --require @babel/polyfill --require @babel/register server/tests/*.test.js --timeout 20000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
