@@ -1,8 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
 import dotenv from "dotenv";
 import routes from "./routes";
+import swaggerDocument from './docs/api-docs.json';
 
 dotenv.config();
 
@@ -16,6 +18,8 @@ const databaseUrl =
 app.use(express.json());
 app.use(cors());
 app.use(routes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 app.use((req, res, next) => {
   res.status(400).json({ Error: "Invalid Request" });
   next();
