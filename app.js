@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from 'cors';
 import dotenv from "dotenv";
 import routes from "./routes";
 
@@ -13,6 +14,7 @@ const databaseUrl =
     : process.env.DATABASE_URL;
 
 app.use(express.json());
+app.use(cors());
 app.use(routes);
 app.use((req, res, next) => {
   res.status(400).json({ Error: "Invalid Request" });

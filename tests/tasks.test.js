@@ -6,13 +6,28 @@ import { data } from "./dummyData/data";
 const { expect } = chai;
 chai.use(chaiHttp);
 
-export let taskId;
+let token;
+let taskId;
 
 describe("tasks endpoint", () => {
+    it('user login to start interacting with tasks', (done) => {
+        chai
+            .request(app)
+            .post("/auth/login")
+            .send(data.validUser)
+            .end((err, res) => {
+                expect(res).to.have.status(200);
+                expect(res.body).to.be.have.property("token");
+                token = res.body.token;
+                done();
+            })
+    });
+
     it('should return 200 ok status code when a task created successfully', (done) => {
         chai
             .request(app)
             .post("/task/")
+            .set("x-auth-token", token)
             .send(data.task)
             .end((err, res) => {
                 expect(res).to.have.status(200);
@@ -22,10 +37,36 @@ describe("tasks endpoint", () => {
             })
     });
 
+    it('should return 401 unauthorized status code when trying to create a task without authentication', (done) => {
+        chai
+            .request(app)
+            .post("/task/")
+            .send(data.task)
+            .end((err, res) => {
+                expect(res).to.have.status(401);
+                expect(res.body).to.have.property("Error");
+                done();
+            });
+    });
+
+    it('should return 401 unauthorized status code when trying to create a task with an invalid token', (done) => {
+        chai
+            .request(app)
+            .post("/task/")
+            .set("x-auth-token", 'invalidToken')
+            .send(data.task)
+            .end((err, res) => {
+                expect(res).to.have.status(403);
+                expect(res.body).to.have.property("Error");
+                done();
+            });
+    });
+
     it('should return 400 bad Request status code when an invalid field are passed through', (done) => {
         chai
             .request(app)
             .post("/task/")
+            .set("x-auth-token", token)
             .send(data.invalidTask)
             .end((err, res) => {
                 expect(res).to.have.status(400);
@@ -34,11 +75,11 @@ describe("tasks endpoint", () => {
             });
     });
 
-
     it('should return 200 ok status when all tasks are retrieved', (done) => {
         chai
             .request(app)
             .get("/task/")
+            .set("x-auth-token", token)
             .end((err, res) => {
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.property("tasks");
@@ -50,6 +91,7 @@ describe("tasks endpoint", () => {
         chai
             .request(app)
             .get(`/task/${taskId}`)
+            .set("x-auth-token", token)
             .end((err, res) => {
                 expect(res).to.have.status(200);
                 expect(res.body).to.have.property("task");
@@ -61,6 +103,7 @@ describe("tasks endpoint", () => {
         chai
             .request(app)
             .patch(`/task/${taskId}`)
+            .set("x-auth-token", token)
             .send(data.editedTask)
             .end((err, res) => {
                 expect(res).to.have.status(200);
@@ -73,6 +116,7 @@ describe("tasks endpoint", () => {
         chai
             .request(app)
             .delete(`/task/${taskId}`)
+            .set("x-auth-token", token)
             .end((err, res) => {
                 expect(res).to.have.status(204);
                 done();
@@ -83,6 +127,7 @@ describe("tasks endpoint", () => {
         chai
             .request(app)
             .get(`/task/${taskId}`)
+            .set("x-auth-token", token)
             .end((err, res) => {
                 expect(res).to.have.status(404);
                 expect(res.body).to.have.property("error");

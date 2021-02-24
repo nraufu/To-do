@@ -13,6 +13,9 @@ const schema = mongoose.Schema({
         type: String,
         required: true
     },
+    userId: {
+        type: String,
+    },
     createdAt: {
         type: Date, 
         default: Date.now
