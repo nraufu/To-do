@@ -1,0 +1,293 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "TO-Do",
+    "description": "To-Do App APIs docs",
+    "contact": {
+      "email": "nraufu@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/nraufu/To-do/blob/develop/README.md"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["HTTPS", "HTTP"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Create new user",
+        "description": "New user signUp for Account",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "User Credentials (email, Password) for account creation",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User Successfully signed Up"
+          },
+          "400": {
+            "description": "Invalid entry"
+          },
+          "409": {
+            "description": "User already Registered"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User Login",
+        "description": "User logging into his account",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "description": "User Credentials (email, Password) for account entry",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User Successfully logged In"
+          },
+          "400": {
+            "description": "Invalid Entry"
+          }
+        }
+      }
+    },
+    "/task/": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Retrieve All Tasks",
+        "description": "Retrieve All Tasks",
+        "produces": ["application/json"],
+        "parameters": [{
+            "name": "x-auth-token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "User Token"
+        }],
+        "responses": {
+          "200": {
+            "description": "tasks successfully retrieved"
+          },
+          "401": {
+            "description": "Unauthorized access"
+          },
+          "403": {
+            "description": "Invalid token"
+          },
+          "404": {
+            "description": "No tasks retrieved"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "create a new task",
+        "description": "create a new task",
+        "consumes": ["application/json"],
+        "parameters": [{
+            "name": "x-auth-token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "User Token"
+        },
+          {
+            "in": "body",
+            "name": "tasks",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/task"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "tasks created successfully"
+          },
+          "400": {
+            "description": "Invalid Entry"
+          },
+          "401": {
+            "description": "Unauthorized access"
+          },
+          "403": {
+            "description": "Invalid token"
+          }
+        }
+      }
+    },
+    "/task/{Id}": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Retrieve a single task",
+        "description": "Retrieve a single task",
+        "produces": ["application/json"],
+        "parameters": [{
+            "name": "x-auth-token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "User Token"
+        },
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "task successfully retrieved"
+          },
+          "400": {
+            "description": "Invalid Entry"
+          },
+          "401": {
+            "description": "Unauthorized access"
+          },
+          "403": {
+            "description": "Invalid token"
+          },
+          "404": {
+            "description": "no task retrieved"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Update a specific task",
+        "description": "Update a specific task with new modifications",
+        "parameters": [{
+            "name": "x-auth-token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "User Token"
+        },
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "tasks",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/task"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "task Successfully modified"
+          },
+          "400": {
+            "description": "Invalid Entry"
+          },
+          "401": {
+            "description": "Unauthorized access"
+          },
+          "403": {
+            "description": "Invalid token"
+          },
+          "404": {
+            "description": "No Task Found!"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete a specific task",
+        "description": "Delete a specific task",
+        "parameters": [{
+            "name": "x-auth-token",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "User Token"
+        },
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Task successfully Deleted"
+          },
+          "401": {
+            "description": "Unauthorized access"
+          },
+          "403": {
+            "description": "Invalid token"
+          },
+          "404": {
+            "description": "Task Not found"
+          },
+          "400": {
+            "description": "Invalid Entry"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "user": {
+      "type": "object",
+      "required": ["email", "password"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "example@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "Password@2021"
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Task Title"
+        },
+        "description": {
+          "type": "string",
+          "example": "this is the task description in full details"
+        },
+        "priority": {
+          "type": "string",
+          "example": "Low"
+        }
+      }
+    }
+  }
+}

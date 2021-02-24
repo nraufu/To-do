@@ -22,7 +22,8 @@ class Tasks {
   async getTasks(req, res) {
     const { user_id } = req.authorizedUser; 
     const tasks = await Task.find({userId: user_id});
-    res.status(200).json({ status: 200, tasks: tasks });
+    if(!tasks) return res.status(404).json({ status: 404, error: "No tasks found" });
+    return res.status(200).json({ status: 200, tasks: tasks });
   }
 
   async getTask(req, res) {
