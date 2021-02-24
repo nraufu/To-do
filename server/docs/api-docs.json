@@ -12,9 +12,9 @@
       "url": "https://github.com/nraufu/To-do/blob/develop/README.md"
     }
   },
-  "host": "localhost:3000",
+  "host": "https://to-do-app-00.herokuapp.com",
   "basePath": "/",
-  "schemes": ["HTTPS", "HTTP"],
+  "schemes": ["HTTPS"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
